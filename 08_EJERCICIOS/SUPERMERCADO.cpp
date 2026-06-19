@@ -91,6 +91,7 @@ int main() {
     int edadCliente = 0;
     int tipoCliente = 0;
     int diaSemana = 0;
+    string areaProducto;
 
     //VARIABLES DEL BUCLE DE SELECCIÓN DE PRODUCTOS
     int codigoProducto = 0;
@@ -132,50 +133,48 @@ int main() {
             cin >> cantidadProducto;
             
             // OBTENER EL PRECIO SEGÚN EL CÓDIGO DE PRODUCTO
-            double precioProducto(int codigoProducto)
-            {
-                switch (codigoProducto) 
-                {
-                    case 1: return 10.00; // Tomates (lb)
-                    case 2: return 15.00; // Repollo (lb)
-                    case 3: return 17.00; // Papas (lb)
-                    case 4: return 50.00; // CarneMolida (lb)
-                    case 5: return 70.00; // CarneCerdo (lb)
-                    case 6: return 75.00; // CarneParaAsar (lb)
-                    case 7: return 50.00; // CervezaNacional (unidad)
-                    case 8: return 80.00; // CervezaExtranjera (unidad)
-                    case 9: return 200.00; // Vino (botella)
-                    case 10: return 100.00; // Vodka (botella)
-                    default: return 0.00; // Código inválido
-                }
+            double precioProducto = 0.00;
+            switch (codigoProducto) {
+                case 1: precioProducto = 10.00; break; // Tomates (lb)
+                case 2: precioProducto = 15.00; break; // Repollo (lb)
+                case 3: precioProducto = 17.00; break; // Papas (lb)
+                case 4: precioProducto = 50.00; break; // CarneMolida (lb)
+                case 5: precioProducto = 70.00; break; // CarneCerdo (lb)
+                case 6: precioProducto = 75.00; break; // CarneParaAsar (lb)
+                case 7: precioProducto = 50.00; break; // CervezaNacional (unidad)
+                case 8: precioProducto = 80.00; break; // CervezaExtranjera (unidad)
+                case 9: precioProducto = 200.00; break; // Vino (botella)
+                case 10: precioProducto = 100.00; break; // Vodka (botella)
+                default: precioProducto = 0.00; break;// Código inválido
             }
 
             // CLASIFICACION DEL ÁREA QUE PERTENECE CADA CODIGO (PRODUCTO)
-            void Areas(int codigoProducto, string &areaProducto)
-            {
-                if (codigoProducto >= 1 && codigoProducto <= 3) {
-                    areaProducto = "Verduras";
-                } else if (codigoProducto >= 4 && codigoProducto <= 6) {
-                    areaProducto = "Carnes";
-                } else if (codigoProducto >= 7 && codigoProducto <= 10) {
-                    areaProducto = "Licores";
-                } else {
-                    areaProducto = "Desconocida";
-                }
+            if (codigoProducto >= 1 && codigoProducto <= 3) {
+                areaProducto = "Verduras";
+            } else if (codigoProducto >= 4 && codigoProducto <= 6) {
+                areaProducto = "Carnes";
+            } else if (codigoProducto >= 7 && codigoProducto <= 10) {
+                areaProducto = "Licores";
+            } else {
+                areaProducto = "Desconocida";
             }
+            cout << "|°.- Área del producto -.°| : " << areaProducto << endl;
             
             // GESTION DE CANTIDADES (LIBRAS, UNIDADES Y BOTELLAS)
-            if (codigoProducto >= 1 && codigoProducto <= 6) {
-                cout << "=> Ha seleccionado " << cantidadProducto << " libras del producto con código " << codigoProducto << "." << endl;
+             if (codigoProducto >= 1 && codigoProducto <= 6) {
+                cout << "Selecciono: " << cantidadProducto 
+                     << " libras del producto con código " << codigoProducto << "." << endl;
             } else if (codigoProducto >= 7 && codigoProducto <= 8) {
-                cout << "=> Ha seleccionado " << cantidadProducto << " unidades del producto con código " << codigoProducto << "." << endl;
+                cout << "Selecciono: " << cantidadProducto 
+                     << " unidades del producto con código " << codigoProducto << "." << endl;
             } else if (codigoProducto >= 9 && codigoProducto <= 10) {
-                cout << "=> Ha seleccionado " << cantidadProducto << " botellas del producto con código " << codigoProducto << "." << endl;
+                cout << "Selecciono: " << cantidadProducto 
+                     << " botellas del producto con código " << codigoProducto << "." << endl;
             }
 
             // CALCULO DEL SUBTOTAL DEL PRODUDUCTO
-            double subtotalProducto = precioProducto(codigoProducto) * cantidadProducto;
-            cout << "=> Subtotal por este producto: L." << subtotalProducto << endl;
+            double subtotalProducto = precioProducto * cantidadProducto;
+            cout << "|°.- Subtotal por este producto -.°| : L." << subtotalProducto << endl;
 
             // --- AQUÍ CONECTARÁN TUS COMPAÑEROS ---
             // Aquí es donde el encargado de "Cálculos y Carrito" meterá sus funciones
