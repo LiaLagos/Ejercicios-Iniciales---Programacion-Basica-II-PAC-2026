@@ -92,6 +92,7 @@ int main() {
     int tipoCliente = 0;
     int diaSemana = 0;
     string areaProducto;
+    string nombreProducto;
 
     //VARIABLES DEL BUCLE DE SELECCIÓN DE PRODUCTOS
     int codigoProducto = 0;
@@ -135,17 +136,39 @@ int main() {
             // OBTENER EL PRECIO SEGÚN EL CÓDIGO DE PRODUCTO
             double precioProducto = 0.00;
             switch (codigoProducto) {
-                case 1: precioProducto = 10.00; break; // Tomates (lb)
-                case 2: precioProducto = 15.00; break; // Repollo (lb)
-                case 3: precioProducto = 17.00; break; // Papas (lb)
-                case 4: precioProducto = 50.00; break; // CarneMolida (lb)
-                case 5: precioProducto = 70.00; break; // CarneCerdo (lb)
-                case 6: precioProducto = 75.00; break; // CarneParaAsar (lb)
-                case 7: precioProducto = 50.00; break; // CervezaNacional (unidad)
-                case 8: precioProducto = 80.00; break; // CervezaExtranjera (unidad)
-                case 9: precioProducto = 200.00; break; // Vino (botella)
-                case 10: precioProducto = 100.00; break; // Vodka (botella)
-                default: precioProducto = 0.00; break;// Código inválido
+                case 1: 
+                nombreProducto = "Tomates";
+                precioProducto = 10.00; break; // Tomates (lb)
+                case 2: 
+                nombreProducto = "Repollo"; 
+                precioProducto = 15.00; break; // Repollo (lb)
+                case 3: 
+                nombreProducto = "Papas";
+                precioProducto = 17.00; break; // Papas (lb)
+                case 4: 
+                nombreProducto = "Carne molida";
+                precioProducto = 50.00; break; // CarneMolida (lb)
+                case 5: 
+                nombreProducto = "Carne de cerdo";
+                precioProducto = 70.00; break; // CarneCerdo (lb)
+                case 6: 
+                nombreProducto = "Carne para asar";
+                precioProducto = 75.00; break; // CarneParaAsar (lb)
+                case 7: 
+                nombreProducto = "Cerveza nacional";
+                precioProducto = 50.00; break; // CervezaNacional (unidad)
+                case 8: 
+                nombreProducto = "Cerveza extranjera";
+                precioProducto = 80.00; break; // CervezaExtranjera (unidad)
+                case 9: 
+                nombreProducto = "Vino";
+                precioProducto = 200.00; break; // Vino (botella)
+                case 10: 
+                nombreProducto = "Vodka";
+                precioProducto = 100.00; break; // Vodka (botella)
+                default: 
+                nombreProducto = "Código inválido";
+                precioProducto = 0.00; break;// Código inválido
             }
 
             // CLASIFICACION DEL ÁREA QUE PERTENECE CADA CODIGO (PRODUCTO)
@@ -163,13 +186,13 @@ int main() {
             // GESTION DE CANTIDADES (LIBRAS, UNIDADES Y BOTELLAS)
              if (codigoProducto >= 1 && codigoProducto <= 6) {
                 cout << "Selecciono: " << cantidadProducto 
-                     << " libras del producto con código " << codigoProducto << "." << endl;
+                     << " libras de " << nombreProducto << "." << endl;
             } else if (codigoProducto >= 7 && codigoProducto <= 8) {
                 cout << "Selecciono: " << cantidadProducto 
-                     << " unidades del producto con código " << codigoProducto << "." << endl;
+                     << " unidades de " << nombreProducto << "." << endl;
             } else if (codigoProducto >= 9 && codigoProducto <= 10) {
                 cout << "Selecciono: " << cantidadProducto 
-                     << " botellas del producto con código " << codigoProducto << "." << endl;
+                     << " botellas de " << nombreProducto << "." << endl;
             }
 
             // CALCULO DEL SUBTOTAL DEL PRODUDUCTO
@@ -179,7 +202,7 @@ int main() {
             // --- AQUÍ CONECTARÁN TUS COMPAÑEROS ---
             // Aquí es donde el encargado de "Cálculos y Carrito" meterá sus funciones
             // Ej: agregarAlCarrito(codigoProducto, cantidadProducto);
-            cout << "\n[OK] Se agregaron " << cantidadProducto << " unidades del producto " << codigoProducto << " al carrito." << endl;
+            cout << "\n[OK] Se agregaron " << cantidadProducto << " unidades de " << nombreProducto << " al carrito." << endl;
             // --------------------------------------
         }
 
