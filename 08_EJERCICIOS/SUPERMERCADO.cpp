@@ -6,226 +6,439 @@ Proyecto: PUMA SUPER-MARKET
 Grupo N°5
 */
 
-#include <iostream>
-#include <string>//PARA USAR LA FUNCION GETLINE Y MANEJO DE CADENAS
-#include <cstdlib>// PARA USAR LA FUNCION SYSTEM("cls") PARA LIMPIAR PANTALLA
-#include <windows.h>// PARA CONFIGURAR EL IDIOMA ESPAÑOL
+#include <iostream> // PARA USAR std::cout, std::cin, std::endl
+#include <string>  // PARA USAR std::string y getline()
+#include <vector> // PARA USAR std::vector (VECTORES)
+#include <iomanip> // PARA USAR std::fixed y std::setprecision()
 
 using namespace std;
 
+//  VECTORES GLOBALES DE PRODUCTOS
+
+// Nombres de productos por área
+vector<string> nombresVerduras = {"Tomates", "Repollo", "Papas"};
+vector<string> nombresCarnes = {"Carne molida", "Carne de cerdo", "Carne para asar"};
+vector<string> nombresLicores = {"Cerveza nacional", "Cerveza extranjera", "Vino", "Vodka"};
+
+// Precios de productos por área
+vector<double> preciosVerduras = {10.00, 15.00, 17.00};
+vector<double> preciosCarnes = {50.00, 70.00, 75.00};
+vector<double> preciosLicores = {50.00, 80.00, 200.00, 100.00};
+
+// Unidades de medida por área
+vector<string> unidadesVerduras = {"Libra", "Libra", "Libra"};
+vector<string> unidadesCarnes = {"Libra", "Libra", "Libra"};
+vector<string> unidadesLicores = {"Unidad", "Unidad", "Botella", "Botella"};
+
+// Vector para tipos de cliente
+vector<string> tiposCliente = {"Estrella", "Regular", "Nuevo"};
+
+// Vector para días de la semana
+vector<string> diasSemana = {"Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"};
+
+// Vectores para almacenar clientes nuevos registrados
+vector<string> registroNombresClientes;
+vector<int> registroEdadesClientes;
+vector<int> registroTiposClientes;
+
+// VECTORES DEL CARRITO DE COMPRAS
+vector<string> carritoProductos;
+vector<string> carritoAreas;
+vector<string> carritoUnidades;
+vector<double> carritoCantidades;
+vector<double> carritoPreciosUnitarios;
+vector<double> carritoSubtotales;
+
 // FUNCIÓN: VALIDACIÓN DE EDAD PARA RESTRICCIÓN DE VENTA DE LICORES
+// Parámetro por valor: edad
 bool esMayorDeEdad(int edad) {
     return edad >= 18;
 }
 
-// FUNCIÓN: CAPTURA LOS DATOS DEL CLIENTE SUS VALIDACIONES Y GESTION DE DESCUENTOS
-// POR DÍA DE LA SEMANA
+// FUNCIÓN: MOSTRAR BENEFICIOS POR TIPO DE CLIENTE
+void mostrarBeneficiosTipoCliente(int tipoCliente) {
+    cout << "\n=========================================================" << endl;
+    cout << "         BENEFICIOS SEGUN SU TIPO DE CLIENTE             " << endl;
+    cout << "=========================================================" << endl;
 
+    switch (tipoCliente) {
+        case 1:
+            cout << " Usted es Cliente ESTRELLA. Sus beneficios:" << endl;
+            cout << "   - 4% de descuento en Carnes y Verduras" << endl;
+            break;
+        case 2:
+            cout << " Usted es Cliente REGULAR. Sus beneficios:" << endl;
+            cout << "   - 3% de descuento en Carnes" << endl;
+            break;
+        case 3:
+            cout << " Usted es Cliente NUEVO. Sus beneficios:" << endl;
+            cout << "   - 2% de descuento en Licores" << endl;
+            break;
+    }
+    cout << "=========================================================\n" << endl;
+}
+
+// FUNCIÓN: MOSTRAR DESCUENTOS EXTRAS DISPONIBLES
+// Parámetros por valor: diaSemana, edadCliente
+void mostrarDescuentosExtras(int diaSemana, int edadCliente) {
+    cout << "=========================================================" << endl;
+    cout << "           DESCUENTOS EXTRAS DISPONIBLES HOY             " << endl;
+    cout << "=========================================================" << endl;
+
+    // Descuento Lunes o Miércoles
+    if (diaSemana == 1 || diaSemana == 3) {
+        cout << " - Dia especial (Lunes/Miercoles):" << endl;
+        cout << " +3% de descuento adicional" << endl;
+    }
+
+    // Descuento Viernes para adultos mayores
+    if (diaSemana == 5 && edadCliente >= 65) {
+        cout << " - Viernes de Adulto Mayor:" << endl;
+        cout << " +10% de descuento adicional" << endl;
+    }
+
+    // Promociones siempre activas
+    cout << " - Promocion en Carnes:" << endl;
+    cout << " La segunda libra de carne al 50% de descuento" << endl;
+    cout << " - Promocion en Cervezas:" << endl;
+    cout << " Si lleva 6 o mas cervezas, descuento fijo de L.10.00" << endl;
+
+    cout << "=========================================================\n" << endl;
+}
+
+// FUNCIÓN: REGISTRAR CLIENTE (Cambio #3 - registra cualquier tipo de cliente)
+// Parámetros por valor: nombreCliente, edadCliente, tipoCliente
+// Parámetros por referencia: vectores de registro
+void registrarCliente(string nombreCliente, int edadCliente, int tipoCliente,
+                      vector<string> &regNombres, vector<int> &regEdades, vector<int> &regTipos) {
+    regNombres.push_back(nombreCliente);
+    regEdades.push_back(edadCliente);
+    regTipos.push_back(tipoCliente);
+
+    cout << "\n=========================================================" << endl;
+    cout << "            REGISTRO DE CLIENTE EXITOSO                  " << endl;
+    cout << "=========================================================" << endl;
+    cout << " Nombre   : " << nombreCliente << endl;
+    cout << " Edad     : " << edadCliente << " anios" << endl;
+    cout << " Tipo     : " << tiposCliente[tipoCliente - 1] << endl;
+    cout << " Estado   : Registrado correctamente en el sistema" << endl;
+    cout << "=========================================================" << endl;
+    cout << " Total de clientes registrados: " << regNombres.size() << endl;
+    cout << "=========================================================\n" << endl;
+}
+
+// FUNCIÓN: CAPTURA DE DATOS DEL CLIENTE CON VALIDACIONES
+// Parámetros por referencia: nombreCliente, edadCliente, tipoCliente, diaSemana
 void DatosCliente(string &nombreCliente, int &edadCliente, int &tipoCliente, int &diaSemana) {
     cout << "=========================================================" << endl;
     cout << "               REGISTRO DE CLIENTE                       " << endl;
     cout << "=========================================================" << endl;
-    
+
     cout << "Por favor ingrese su nombre: ";
     getline(cin, nombreCliente);
 
-    // VALIDACION DE EDAD RAZONABLE 
+    // VALIDACIÓN DE EDAD
     do {
         cout << "Ingrese su edad: ";
         cin >> edadCliente;
         if (edadCliente < 0 || edadCliente > 100) {
-            cout << "Error: Edad no válida. Intente de nuevo.\n" << endl;
+            cout << "Error: Edad no valida. Intente de nuevo.\n" << endl;
         }
     } while (edadCliente < 0 || edadCliente > 100);
 
+    // MOSTRAR TIPOS DE CLIENTE USANDO VECTOR
+    cout << "\nTipos de cliente disponibles:" << endl;
+    for (int i = 0; i < (int)tiposCliente.size(); i++) {
+        cout << "  " << (i + 1) << ". " << tiposCliente[i] << endl;
+    }
+
     // VALIDACIÓN DEL TIPO DE CLIENTE
     do {
-        cout << "Ingrese Tipo de Cliente (1. Estrella / 2. Regular / 3. Nuevo): ";
+        cout << "Ingrese Tipo de Cliente (1-" << tiposCliente.size() << "): ";
         cin >> tipoCliente;
-        if (tipoCliente < 1 || tipoCliente > 3) {
-            cout << "Error: Tipo inválido. Intente de nuevo.\n" << endl;
+        if (tipoCliente < 1 || tipoCliente > (int)tiposCliente.size()) {
+            cout << "Error: Tipo invalido. Intente de nuevo." << endl;
         }
-    } while (tipoCliente < 1 || tipoCliente > 3);
+    } while (tipoCliente < 1 || tipoCliente > (int)tiposCliente.size());
 
-    // VALIDACIÓN DEL DÍA DE LA SEMANA PARA DESCUENTOS
+    // MOSTRAR BENEFICIOS DEL TIPO ELEGIDO INMEDIATAMENTE
+    mostrarBeneficiosTipoCliente(tipoCliente);
+
+    // MOSTRAR DÍAS DE LA SEMANA USANDO VECTOR
+    cout << "\nDias de la semana:" << endl;
+    for (int i = 0; i < (int)diasSemana.size(); i++) {
+        cout << "  " << (i + 1) << ". " << diasSemana[i] << endl;
+    }
+
+    // VALIDACIÓN DEL DÍA DE LA SEMANA
     do {
-        cout << "Ingrese el día de hoy (1.Lunes / 2.Martes / 3.Miercoles / 4.Jueves / 5.Viernes / 6.Sabado / 7.Domingo): ";
+        cout << "Ingrese el dia de hoy (1-" << diasSemana.size() << "): ";
         cin >> diaSemana;
-        if (diaSemana < 1 || diaSemana > 7) {
-            cout << "Error: Día no válido. Intente de nuevo.\n" << endl;
+        if (diaSemana < 1 || diaSemana > (int)diasSemana.size()) {
+            cout << "Error: Dia no valido. Intente de nuevo." << endl;
         }
-    } while (diaSemana < 1 || diaSemana > 7);
+    } while (diaSemana < 1 || diaSemana > (int)diasSemana.size());
+
+    // MOSTRAR DESCUENTOS EXTRAS SEGÚN DÍA ELEGIDO
+    mostrarDescuentosExtras(diaSemana, edadCliente);
 }
 
-// 3. FUNCIÓN: MENÚ PRINCIPAL 
+// FUNCIÓN: MENÚ PRINCIPAL CON VECTORES
 void menuPrincipal() {
+    int codigo = 1;
+
     cout << "=========================================================" << endl;
-    cout << "             PUMA SUPER-MARKET - MENÚ DE ÁREAS           " << endl;
+    cout << "             PUMA SUPER-MARKET - MENU DE AREAS           " << endl;
     cout << "=========================================================" << endl;
-    cout << " [ ÁREA DE VERDURAS ]" << endl;
-    cout << "   1. Tomates          (L.10.00 / Libra)" << endl;
-    cout << "   2. Repollo          (L.15.00 / Libra)" << endl;
-    cout << "   3. Papas            (L.17.00 / Libra)" << endl;
+
+    // ÁREA DE VERDURAS (recorrido con vector)
+    cout << " [ AREA DE VERDURAS ]" << endl;
+    for (int i = 0; i < (int)nombresVerduras.size(); i++) {
+        cout << "   " << codigo << ". " << nombresVerduras[i]
+             << "  (L." << preciosVerduras[i]
+             << " / " << unidadesVerduras[i] << ")" << endl;
+        codigo++;
+    }
     cout << "---------------------------------------------------------" << endl;
-    cout << " [ ÁREA DE CARNES ]" << endl;
-    cout << "   4. Carne molida     (L.50.00 / Libra)" << endl;
-    cout << "   5. Carne de cerdo   (L.70.00 / Libra)" << endl;
-    cout << "   6. Carne para asar  (L.75.00 / Libra)" << endl;
+
+    // ÁREA DE CARNES (recorrido con vector)
+    cout << " [ AREA DE CARNES ]" << endl;
+    for (int i = 0; i < (int)nombresCarnes.size(); i++) {
+        cout << "   " << codigo << ". " << nombresCarnes[i]
+             << "  (L." << preciosCarnes[i]
+             << " / " << unidadesCarnes[i] << ")" << endl;
+        codigo++;
+    }
     cout << "---------------------------------------------------------" << endl;
-    cout << " [ ÁREA DE LICORES ]" << endl;
-    cout << "   7. Cerveza nacional (L.50.00 / Unidad)" << endl;
-    cout << "   8. Cerveza extranjera(L.80.00 / Unidad)" << endl;
-    cout << "   9. Vino             (L.200.00 / Botella)" << endl;
-    cout << "   10. Vodka           (L.100.00 / Botella)" << endl;
+
+    // ÁREA DE LICORES (recorrido con vector)
+    cout << " [ AREA DE LICORES ]" << endl;
+    for (int i = 0; i < (int)nombresLicores.size(); i++) {
+        cout << "   " << codigo << ". " << nombresLicores[i]
+             << "  (L." << preciosLicores[i]
+             << " / " << unidadesLicores[i] << ")" << endl;
+        codigo++;
+    }
     cout << "=========================================================" << endl;
+}
+
+// FUNCIÓN: OBTENER DATOS DEL PRODUCTO SEGÚN EL CÓDIGO
+// Parámetros por valor: codigoProducto
+// Parámetros por referencia: nombreProducto, precioUnitario, areaProducto, unidadMedida
+bool obtenerDatosProducto(int codigoProducto, string &nombreProducto, double &precioUnitario,
+    string &areaProducto, string &unidadMedida) {
+
+    int limiteVerduras = nombresVerduras.size();
+    int limiteCarnes = limiteVerduras + nombresCarnes.size();
+    int limiteLicores = limiteCarnes + nombresLicores.size();
+
+    // Determinar el área del producto según el código ingresado
+    if (codigoProducto >= 1 && codigoProducto <= limiteVerduras) {
+        int i = codigoProducto - 1;
+        nombreProducto = nombresVerduras[i];
+        precioUnitario = preciosVerduras[i];
+        areaProducto = "Verduras";
+        unidadMedida = unidadesVerduras[i];
+        return true;
+    }
+    else if (codigoProducto > limiteVerduras && codigoProducto <= limiteCarnes) {
+        int i = codigoProducto - limiteVerduras - 1;
+        nombreProducto = nombresCarnes[i];
+        precioUnitario = preciosCarnes[i];
+        areaProducto = "Carnes";
+        unidadMedida = unidadesCarnes[i];
+        return true;
+    }
+    else if (codigoProducto > limiteCarnes && codigoProducto <= limiteLicores) {
+        int i = codigoProducto - limiteCarnes - 1;
+        nombreProducto = nombresLicores[i];
+        precioUnitario = preciosLicores[i];
+        areaProducto = "Licores";
+        unidadMedida = unidadesLicores[i];
+        return true;
+    }
+
+    return false;
+}
+
+// FUNCIÓN: CONTROL DEL BUCLE DE COMPRA
+// Parámetros por referencia: continuarCompra
+// Parámetro por valor: nombreCliente, edadCliente
+void controlBucleCompra(const string &nombreCliente, int edadCliente, char &continuarCompra,
+    double &subtotalGeneral) {
+    int totalProductos = nombresVerduras.size() + nombresCarnes.size() + nombresLicores.size();
+    int codigoProducto;
+
+    string nombreProducto, areaProducto, unidadMedida;
+    double precioUnitario = 0.0;
+    double cantidad = 0.0;
+    double subtotalBase = 0.0;
+
+    cout << "Bienvenido/a " << nombreCliente << " a PUMA SUPER-MARKET!" << endl;
+    if (!esMayorDeEdad(edadCliente)) {
+        cout << "* NOTA: Al ser menor de 18 anios, el area de licores estara bloqueada. *" << endl;
+    }
+    cout << "---------------------------------------------------------" << endl;
+
+    menuPrincipal();
+    cout << "\nIngrese el Codigo del producto que desea llevar (1-" << totalProductos << "): ";
+    cin >> codigoProducto;
+
+    if (codigoProducto < 1 || codigoProducto > totalProductos) {
+        cout << "=> Error: Codigo de producto inexistente." << endl;
+    }
+    else if (codigoProducto > (int)(nombresVerduras.size() + nombresCarnes.size()) && !esMayorDeEdad(edadCliente)) {
+        cout << "\n[ RESTRICCION DE EDAD ]" << endl;
+        cout << "=> Error: Venta prohibida. Usted es menor de edad y no puede comprar licores.\n" << endl;
+    }
+    else {
+        if (obtenerDatosProducto(codigoProducto, nombreProducto, precioUnitario, areaProducto, unidadMedida)) {
+
+            cout << "\n=========================================================" << endl;
+            cout << "               PRODUCTO SELECCIONADO                     " << endl;
+            cout << "=========================================================" << endl;
+            cout << " Codigo         : " << codigoProducto << endl;
+            cout << " Producto       : " << nombreProducto << endl;
+            cout << " Area           : " << areaProducto << endl;
+            cout << " Precio Unitario: L. " << fixed << setprecision(2) << precioUnitario << endl;
+            cout << " Unidad Medida  : " << unidadMedida << endl;
+            cout << "=========================================================" << endl;
+
+            do {
+                if (unidadMedida == "Libra") {
+                    cout << "Ingrese la cantidad de libras que desea comprar: ";
+                }
+                else if (unidadMedida == "Unidad") {
+                    cout << "Ingrese la cantidad de unidades que desea comprar: ";
+                }
+                else if (unidadMedida == "Botella") {
+                    cout << "Ingrese la cantidad de botellas que desea comprar: ";
+                }
+
+                cin >> cantidad;
+
+                if (cantidad <= 0) {
+                    cout << "Error: La cantidad debe ser mayor que 0. Intente de nuevo.\n";
+                }
+
+            } while (cantidad <= 0);
+
+            subtotalBase = cantidad * precioUnitario;
+
+            carritoProductos.push_back(nombreProducto);
+            carritoAreas.push_back(areaProducto);
+            carritoUnidades.push_back(unidadMedida);
+            carritoCantidades.push_back(cantidad);
+            carritoPreciosUnitarios.push_back(precioUnitario);
+            carritoSubtotales.push_back(subtotalBase);
+
+            subtotalGeneral += subtotalBase;
+
+            cout << "\n=========================================================" << endl;
+            cout << "               PRODUCTO AGREGADO AL CARRITO             " << endl;
+            cout << "=========================================================" << endl;
+            cout << " Producto        : " << nombreProducto << endl;
+            cout << " Cantidad        : " << cantidad << " " << unidadMedida;
+            if (cantidad != 1) {
+                if (unidadMedida == "Libra") cout << "s";
+                else if (unidadMedida == "Unidad") cout << "es";
+                else if (unidadMedida == "Botella") cout << "s";
+            }
+            cout << endl;
+            cout << " Precio Unitario : L. " << fixed << setprecision(2) << precioUnitario << endl;
+            cout << " Subtotal Artic. : L. " << fixed << setprecision(2) << subtotalBase << endl;
+            cout << "---------------------------------------------------------" << endl;
+            cout << " Subtotal Compra : L. " << fixed << setprecision(2) << subtotalGeneral << endl;
+            cout << "=========================================================" << endl;
+        }
+    }
+
+    do {
+        cout << "\nDesea seguir agregando productos al carrito? (s/n): ";
+        cin >> continuarCompra;
+        if (continuarCompra != 's' && continuarCompra != 'S' &&
+            continuarCompra != 'n' && continuarCompra != 'N') {
+            cout << "Error: Opcion no valida. Ingrese 's' o 'n'." << endl;
+        }
+    } while (continuarCompra != 's' && continuarCompra != 'S' &&
+             continuarCompra != 'n' && continuarCompra != 'N');
+    cout << endl;
 }
 
 // FUNCIÓN PRINCIPAL
 int main() {
 
-    SetConsoleOutputCP(CP_UTF8); 
-    SetConsoleCP(CP_UTF8);//CARACTERES EN ESPAÑOL
+    char otroCliente = 's';
 
-    // VARIABLES DE DATOS DEL CLIENTE
-    string nombreCliente;
-    int edadCliente = 0;
-    int tipoCliente = 0;
-    int diaSemana = 0;
-    string areaProducto;
-    string nombreProducto;
-
-    //VARIABLES DEL BUCLE DE SELECCIÓN DE PRODUCTOS
-    int codigoProducto = 0;
-    int cantidadProducto = 0;
-    char continuarCompra = 's';
-
-    //CAPTURA DE DATOS DEL CLIENTE
-    DatosCliente(nombreCliente, edadCliente, tipoCliente, diaSemana);
-    
-    system("cls"); // LIMPIEZA DE PANTALLA PARA EMPEZAR EL PROCESO DE COMPRA
-
-    // BIENVENIDA E INFORMACIÓN DE RESTRICCIÓN DE EDAD PARA LICORES
-
-    cout << "Bienvenido/a " << nombreCliente << " a PUMA SUPER-MARKET!" << endl;
-    if (!esMayorDeEdad(edadCliente)) {
-        cout << "* NOTA: Al ser menor de 18 años, el area de licores estara bloqueada. *" << endl;
-    }
-    cout << "---------------------------------------------------------\n" << endl;
-
-    // CICLO PRINCIPAL DE COMPRA
     do {
-        menuPrincipal();
-        
-        cout << "\nIngrese el Código del producto que desea llevar (1-10): ";
-        cin >> codigoProducto;
+        string nombreCliente;
+        int edadCliente = 0;
+        int tipoCliente = 0;
+        int diaSemana = 0;
+        char continuarCompra = 's';
+        double subtotalGeneral = 0.0;
 
-        // VALIDACIÓN DE CÓDIGOS DE PRODUCTO
-        if (codigoProducto < 1 || codigoProducto > 10) {
-            cout << "=> Error: Codigo de producto inexistente." << endl;
-        } 
-        // CONTROL DE RESTRICCIÓN DE LICORES (Códigos del 7 al 10)
-        else if ((codigoProducto >= 7 && codigoProducto <= 10) && !esMayorDeEdad(edadCliente)) {
-            cout << "\n[ RESTRICCION DE EDAD ]" << endl;
-            cout << "=> Error: Venta prohibida. Usted es menor de edad y no puede comprar licores.\n" << endl;
-        } 
-        // SI EL CÓDIGO ES VÁLIDO Y NO HAY RESTRICCIÓN, SE PROCEDE A CAPTURAR LA CANTIDAD
-        else {
-            cout << "Ingrese la cantidad a llevar: ";
-            cin >> cantidadProducto;
-            
-            // OBTENER EL PRECIO SEGÚN EL CÓDIGO DE PRODUCTO
-            double precioProducto = 0.00;
-            switch (codigoProducto) {
-                case 1: 
-                nombreProducto = "Tomates";
-                precioProducto = 10.00; break; // Tomates (lb)
-                case 2: 
-                nombreProducto = "Repollo"; 
-                precioProducto = 15.00; break; // Repollo (lb)
-                case 3: 
-                nombreProducto = "Papas";
-                precioProducto = 17.00; break; // Papas (lb)
-                case 4: 
-                nombreProducto = "Carne molida";
-                precioProducto = 50.00; break; // CarneMolida (lb)
-                case 5: 
-                nombreProducto = "Carne de cerdo";
-                precioProducto = 70.00; break; // CarneCerdo (lb)
-                case 6: 
-                nombreProducto = "Carne para asar";
-                precioProducto = 75.00; break; // CarneParaAsar (lb)
-                case 7: 
-                nombreProducto = "Cerveza nacional";
-                precioProducto = 50.00; break; // CervezaNacional (unidad)
-                case 8: 
-                nombreProducto = "Cerveza extranjera";
-                precioProducto = 80.00; break; // CervezaExtranjera (unidad)
-                case 9: 
-                nombreProducto = "Vino";
-                precioProducto = 200.00; break; // Vino (botella)
-                case 10: 
-                nombreProducto = "Vodka";
-                precioProducto = 100.00; break; // Vodka (botella)
-                default: 
-                nombreProducto = "Código inválido";
-                precioProducto = 0.00; break;// Código inválido
-            }
+        DatosCliente(nombreCliente, edadCliente, tipoCliente, diaSemana);
 
-            // CLASIFICACION DEL ÁREA QUE PERTENECE CADA CODIGO (PRODUCTO)
-            if (codigoProducto >= 1 && codigoProducto <= 3) {
-                areaProducto = "Verduras";
-            } else if (codigoProducto >= 4 && codigoProducto <= 6) {
-                areaProducto = "Carnes";
-            } else if (codigoProducto >= 7 && codigoProducto <= 10) {
-                areaProducto = "Licores";
-            } else {
-                areaProducto = "Desconocida";
-            }
-            cout << "|°.- Área del producto -.°| : " << areaProducto << endl;
-            
-            // GESTION DE CANTIDADES (LIBRAS, UNIDADES Y BOTELLAS)
-             if (codigoProducto >= 1 && codigoProducto <= 6) {
-                cout << "Selecciono: " << cantidadProducto 
-                     << " libras de " << nombreProducto << "." << endl;
-            } else if (codigoProducto >= 7 && codigoProducto <= 8) {
-                cout << "Selecciono: " << cantidadProducto 
-                     << " unidades de " << nombreProducto << "." << endl;
-            } else if (codigoProducto >= 9 && codigoProducto <= 10) {
-                cout << "Selecciono: " << cantidadProducto 
-                     << " botellas de " << nombreProducto << "." << endl;
-            }
+        registrarCliente(nombreCliente, edadCliente, tipoCliente,
+                         registroNombresClientes, registroEdadesClientes, registroTiposClientes);
 
-            // CALCULO DEL SUBTOTAL DEL PRODUDUCTO
-            double subtotalProducto = precioProducto * cantidadProducto;
-            cout << "|°.- Subtotal por este producto -.°| : L." << subtotalProducto << endl;
+        // LIMPIAR CARRITO PARA EL NUEVO CLIENTE
+        carritoProductos.clear();
+        carritoAreas.clear();
+        carritoUnidades.clear();
+        carritoCantidades.clear();
+        carritoPreciosUnitarios.clear();
+        carritoSubtotales.clear();
 
-            // --- AQUÍ CONECTARÁN TUS COMPAÑEROS ---
-            // Aquí es donde el encargado de "Cálculos y Carrito" meterá sus funciones
-            // Ej: agregarAlCarrito(codigoProducto, cantidadProducto);
-            cout << "\n[OK] Se agregaron " << cantidadProducto << " unidades de " << nombreProducto << " al carrito." << endl;
-            // --------------------------------------
+        do {
+            controlBucleCompra(nombreCliente, edadCliente, continuarCompra, subtotalGeneral);
+        } while (continuarCompra == 's' || continuarCompra == 'S');
+
+        cout << "\n=========================================================" << endl;
+        cout << "                 RESUMEN DE LA COMPRA                    " << endl;
+        cout << "=========================================================" << endl;
+
+        for (int i = 0; i < (int)carritoProductos.size(); i++) {
+            cout << i + 1 << ". " << carritoProductos[i]
+                 << " | Area: " << carritoAreas[i]
+                 << " | Cantidad: " << carritoCantidades[i] << " " << carritoUnidades[i]
+                 << " | P.Unit: L. " << fixed << setprecision(2) << carritoPreciosUnitarios[i]
+                 << " | Subtotal: L. " << carritoSubtotales[i] << endl;
         }
 
-        // CONSULTA PARA SEGUIR COMPRANDO O IR AL CIERRE DE CAJA
-        cout << "\n¿Desea seguir agregando productos al carrito? (s/n): ";
-        cin >> continuarCompra;
-        
-        system("cls");
+        cout << "---------------------------------------------------------" << endl;
+        cout << " SUBTOTAL GENERAL DE LA COMPRA: L. " << fixed << setprecision(2) << subtotalGeneral << endl;
+        cout << "=========================================================" << endl;
 
-    } while (continuarCompra == 's' || continuarCompra == 'S');
+        cout << "\nGracias por su compra, " << nombreCliente << "!" << endl;
 
-    // 3. CIERRE DE CAJA Y FACTURACIÓN
+        do {
+            cout << "\n=========================================================" << endl;
+            cout << "  Desea atender a otro cliente? (s/n): ";
+            cin >> otroCliente;
+            if (otroCliente != 's' && otroCliente != 'S' && otroCliente != 'n' && otroCliente != 'N') {
+                cout << "  Error: Opcion no valida. Ingrese 's' o 'n'." << endl;
+            }
+        } while (otroCliente != 's' && otroCliente != 'S' && otroCliente != 'n' && otroCliente != 'N');
+        cin.ignore();
+        cout << "=========================================================\n" << endl;
+
+    } while (otroCliente == 's' || otroCliente == 'S');
+
+    cout << "\n=========================================================" << endl;
+    cout << "       RESUMEN DE CLIENTES ATENDIDOS EN ESTA SESION      " << endl;
     cout << "=========================================================" << endl;
-    cout << "               PROCEDIENDO AL CIERRE DE CAJA             " << endl;
+    cout << " Total de clientes: " << registroNombresClientes.size() << endl;
+    cout << "---------------------------------------------------------" << endl;
+    for (int i = 0; i < (int)registroNombresClientes.size(); i++) {
+        cout << "  " << (i + 1) << ". " << registroNombresClientes[i]
+             << " | Edad: " << registroEdadesClientes[i]
+             << " | Tipo: " << tiposCliente[registroTiposClientes[i] - 1] << endl;
+    }
     cout << "=========================================================" << endl;
-    
-    // --- AQUÍ CONECTARÁ TU COMPAÑERO DE FACTURACIÓN ---
-    // Aquí se llamará a la función que procesa los subtotales, ISV (15% o 18%), 
-    // descuentos por día, tipo de cliente, tercera edad, y hace el cambio a Dólares (L.24.5)
-    // Ej: mostrarFacturaFinal(nombreCliente, tipoCliente, edadCliente, diaSemana);
-    
-    cout << "\n[Espacio reservado para la Factura Final]" << endl;
-    cout << "Gracias por su compra en PUMA SUPER-MARKET." << endl;
+    cout << "  Gracias por usar PUMA SUPER-MARKET. Hasta pronto!" << endl;
+    cout << "=========================================================\n" << endl;
 
     return 0;
 }
