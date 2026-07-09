@@ -73,7 +73,7 @@ int main()
 
     // ciclo para mostrar los correlativos entre los valores ingresados
     cout << "Correlativos entre " << inicio << " y " << limite << ":" << endl;
-    for (int i = inicio; i <= limite; i++)
+    for (int i = limite; i <= inicio; i--)
     {
         datos[i] = inicio++;     // Almacenar el valor en el arreglo
         cout << datos[i] << " "; // Mostrar el valor
