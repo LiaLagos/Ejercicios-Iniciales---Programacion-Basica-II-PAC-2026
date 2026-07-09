@@ -15,25 +15,61 @@ int main()
     int totalCorrelativos = 0;
 
     // Solicitar al usuario los valores inicial y final
-    cout << "Ingrese el valor inicial: ";
-    cin >> inicio;
+    do
+    {
+        cout << "Ingrese el valor inicial: ";
+        cin >> inicio;
+
+        if(inicio < 0)
+        {
+            cout << "Error: El valor inicial no puede ser negativo." << endl;
+            // Validar que el valor inicial no sea negativo
+        }
+        else if(inicio >= 100)
+        {
+            cout << "Error: El valor inicial no puede ser mayor o igual a 100." << endl;
+            // Validar que el valor inicial no sea mayor a 100
+        }
+
+    } while (inicio < 0 || inicio >= 100);
+    // Validar que el valor inicial esté entre 0 y 100
 
     // validar que no existan más de 100 correlativos entre los valores ingresados
-
     do
     {
         cout << "Ingrese el valor final: ";
         cin >> limite;
 
-        // mostrar la cantidads de correlativos entre los valores ingresados
-        totalCorrelativos = limite - inicio;
-        cout << "Cantidad de correlativos entre " << inicio << " y " << limite << ": " << totalCorrelativos << endl;
-
-        if (limite - inicio > 100)
+        if(limite < 0)
         {
-            cout << "Error: La diferencia entre los valores ingresados no puede ser mayor a 100." << endl;
+            cout << "Error: El valor final no puede ser negativo." << endl;
+            // Validar que el valor final no sea negativo
         }
-    } while (limite - inicio > 100);
+        else if(limite > 100)
+        {
+            cout << "Error: El valor final no puede ser mayor a 100." << endl;
+            // Validar que el valor final no sea mayor a 100
+        }
+        else if (limite <= inicio)
+        {
+            cout << "Error: El valor final no puede ser menor o igual al valor inicial." << endl;
+            // Validar que el valor final no sea menor o igual al valor inicial
+        }
+        else
+        {
+            // mostrar la cantidads de correlativos entre los valores ingresados
+            totalCorrelativos = limite - inicio;
+            cout << "Cantidad de correlativos entre " << inicio << " y " << limite << ": " << totalCorrelativos << endl;
+
+            if(totalCorrelativos > 100)
+            {
+            cout << "Error: La diferencia entre los valores ingresados no puede ser mayor a 100." << endl;
+            // Validar que la diferencia entre los valores ingresados no sea mayor a 100
+            }
+        }
+
+    } while (limite < 0 || limite > 100 || limite <= inicio|| totalCorrelativos > 100);
+    // Validar que el valor final esté entre 0 y 100, que no sea menor al valor inicial y que la diferencia entre los valores ingresados no sea mayor a 100
 
     // ciclo para mostrar los correlativos entre los valores ingresados
     cout << "Correlativos entre " << inicio << " y " << limite << ":" << endl;
