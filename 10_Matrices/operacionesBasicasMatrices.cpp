@@ -6,18 +6,18 @@
     EL REPORTE DE LOS RESULTADOS DEBE MOSTRARSE EN PANTALLA Y GUARDARSE EN UN ARCHIVO DE TEXTO
   */
 
-  #include <iostream>
+#include <iostream>
 #include <fstream> // Librería para manejo de archivos
 using namespace std;
 
 // Definir e inicializar las matrices
 int filas, columnas;
-double datos1[4][4];
-double datos2[4][4];
-double resultado[4][4];
+double datos1[10][10];
+double datos2[10][10];
+double resultado[10][10];
 
 // Función para llenar una matriz
-void llenarMatriz(double matriz[4][4], int n, string nombre) {
+void llenarMatriz(double matriz[10][10], int n, string nombre) {
     cout << "\nIngrese los valores de la matriz " << nombre << ":\n";
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -28,7 +28,7 @@ void llenarMatriz(double matriz[4][4], int n, string nombre) {
 }
 
 // Función para mostrar una matriz
-void mostrarMatriz(double matriz[4][4], int n, string titulo) {
+void mostrarMatriz(double matriz[10][10], int n, string titulo) {
     cout << "\n" << titulo << ":\n";
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
@@ -39,7 +39,7 @@ void mostrarMatriz(double matriz[4][4], int n, string titulo) {
 }
 
 // Función para guardar el reporte en archivo
-void guardarArchivo(double m1[4][4], double m2[4][4], double res[4][4], int n, int opcion) {
+void guardarArchivo(double m1[10][10], double m2[10][10], double res[10][10], int n, int opcion) {
     ofstream archivo("reporte_matrices.txt");
 
     if (!archivo) {
@@ -94,14 +94,14 @@ int main() {
     cout << "===== OPERACIONES BASICAS CON MATRICES CUADRADAS =====\n";
     
     do {
-        cout << "Ingrese el tamano de la matriz cuadrada (maximo 4): ";
+        cout << "Ingrese el tamano de la matriz cuadrada (maximo 10): ";
         cin >> filas;
 
-        if (filas < 1 || filas > 4) {
-            cout << "Error. El tamano debe estar entre 1 y 4.\n";
+        if (filas < 1 || filas > 10) {
+            cout << "Error. El tamano debe estar entre 1 y 10.\n";
         }
 
-    } while (filas < 1 || filas > 4);
+    } while (filas < 1 || filas > 10);
 
     columnas = filas; // porque es cuadrada
 
