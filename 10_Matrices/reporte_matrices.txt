@@ -1,0 +1,12 @@
+===== REPORTE DE OPERACIONES CON MATRICES =====
+Operacion realizada: SUMA
+Dimension de la matriz: 1 x 1
+
+MATRIZ 1:
+2	
+
+MATRIZ 2:
+3	
+
+RESULTADO:
+5	
