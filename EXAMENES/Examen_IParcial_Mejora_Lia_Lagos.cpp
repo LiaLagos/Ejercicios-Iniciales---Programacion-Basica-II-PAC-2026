@@ -65,10 +65,10 @@ double ganTablets = 0.0;
 double ganAccesorios = 0.0;
 
 // Totales del día
-double totalDescuentosDia = 0.0;
-double totalISVDia = 0.0;
-double totalVentasDia = 0.0;
-double totalVentasUSD = 0.0;
+double totalDescuentosDia;
+double totalISVDia;
+double totalVentasDia;
+double totalVentasUSD;
 
 // Métodos de pago
 int pagoEfectivo = 0;
@@ -708,6 +708,7 @@ void controlBucleCompra(const string &nombreCliente, char &continuarCompra, doub
                 {
                     cout << "Error: La cantidad debe ser mayor que 0. Intente de nuevo.\n";
                 }
+                
 
             } while (cantidad <= 0);
 
